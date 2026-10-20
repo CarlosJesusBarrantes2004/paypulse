@@ -1,0 +1,33 @@
+# Archivos de entorno y credenciales
+.env
+
+# Archivos de compilación de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Entornos virtuales
+venv/
+env/
+.venv/
+
+# Base de datos local y estáticos
+*.sqlite3
+db.sqlite3
+media/
+staticfiles/
+
+# Logs y Celery
+*.log
+celerybeat-schedule
+celerybeat.pid
+
+# Herramientas de testing y cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Configuración de IDEs
+.vscode/
+.idea/
