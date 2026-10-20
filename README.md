@@ -67,3 +67,8 @@ graph TD
    python manage.py migrate
    python manage.py runserver
    ```
+
+### 🤖 Microservicio de Machine Learning (MLOps)
+* **Modelo:** XGBoost + SMOTE (Detección de fraude ajustada para alto Recall).
+* **Servidor de Inferencia:** FastAPI containerizado en Docker.
+* **Integración:** Evaluación de riesgo en tiempo real en la capa de servicio de Django antes de ejecutar cobros en pasarelas externas.

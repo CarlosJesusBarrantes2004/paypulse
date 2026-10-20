@@ -27,6 +27,7 @@ class ProcesarPagoView(APIView):
                 moneda=datos["moneda"],
                 idempotency_key=idempotency_key,
                 token_tarjeta=datos["token_tarjeta"],
+                v_features=datos.get("v_features"),
             )
 
             respuesta_payload = {

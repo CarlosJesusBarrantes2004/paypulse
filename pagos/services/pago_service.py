@@ -8,6 +8,7 @@ from pagos.services.gateway import (
     PasarelaRedExcepcion,
 )
 from pagos.services.resilience import ejecutar_con_reintentos
+from pagos.services.fraud_client import FrauDetectionService
 from pagos.tasks import generar_comprobante_pago_async
 
 
@@ -19,6 +20,7 @@ class PagoService:
         moneda: str = "USD",
         idempotency_key: str = None,
         token_tarjeta: str = "tok_visa",
+        v_features: dict = None,
     ) -> TransaccionPago:
         cliente = Cliente.objects.get(id=cliente_id, activo=True)
 
@@ -32,6 +34,17 @@ class PagoService:
             )
 
         transaccion.cambiar_estado(EstadoPago.PROCESSING)
+
+        evaluacion_ml = FrauDetectionService.evaluar_transaccion(
+            monto=float(monto), v_features=v_features
+        )
+
+        if evaluacion_ml.get("es_fraude"):
+            transaccion.cambiar_estado(
+                EstadoPago.FAILED,
+                error_msg=f"Transacción bloqueada por Machine Learning. Riesgo: {evaluacion_ml.get("probabilidad_fraude")*100}%",
+            )
+            return transaccion
 
         try:
             respuesta_gateway = ejecutar_con_reintentos(
